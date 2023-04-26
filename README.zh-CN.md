@@ -1,10 +1,10 @@
 <h1 align="center">antd-vue3-admin</h1>
 
-<div align="center">
-一个基于vue3，vite4和ant-design-vue4的中后台开发模板工程。
-</div>
-
 **中文** | [English](README.md)
+
+## 简介
+
+一个基于vue3，vite4和ant-design-vue4的中后台开发模板工程。使用最新的`vue3`, `vite4`, `TypeScript5`等前沿技术，开箱即用的前端解决方案，可用于学习及业务开发。
 
 ## Recommended IDE Setup
 
