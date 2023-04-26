@@ -1,6 +1,10 @@
-# antd-vue3-admin
+<h1 align="center">antd-vue3-admin</h1>
 
-This template should help get you started developing with Vue 3 in Vite.
+<div align="center">
+A mid-backend development template project based on vue3, vite4 and ant-design-vue4.
+</div>
+
+**English** | [中文](README.zh-CN.md)
 
 ## Recommended IDE Setup
 
