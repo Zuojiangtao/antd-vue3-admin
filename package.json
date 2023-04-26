@@ -1,6 +1,23 @@
 {
   "name": "antd-vue3-admin",
   "version": "0.0.0",
+  "author": {
+    "name": "Zuojiangtao",
+    "email": "1799158837@qq.com",
+    "url": "https://github.com/Zuojiangtao"
+  },
+  "keywords": [
+    "vue3",
+    "vite4",
+    "ant-design-vue",
+    "admin"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Zuojiangtao/antd-vue3-admin.git"
+  },
+  "homepage": "https://github.com/Zuojiangtao/antd-vue3-admin",
+  "license": "MIT",
   "scripts": {
     "dev": "vite",
     "build": "run-p type-check build-only",
