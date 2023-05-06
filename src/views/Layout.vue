@@ -58,17 +58,12 @@
     </a-layout>
   </a-layout>
 </template>
-<script lang="ts">
-  import { defineComponent, ref } from 'vue';
-  export default defineComponent({
-    data() {
-      return {
-        collapsed: ref<boolean>(false),
-        selectedKeys: ref<string[]>(['1']),
-      };
-    },
-  });
+
+<script lang="ts" setup>
+  const collapsed = ref<boolean>(false);
+  const selectedKeys = ref<string[]>(['1']);
 </script>
+
 <style lang="less" scoped>
   .logo {
     height: 32px;
