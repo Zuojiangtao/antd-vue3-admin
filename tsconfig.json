@@ -1,12 +1,6 @@
 {
-  "extends": "@vue/tsconfig/tsconfig.web.json",
-  "include": [
-    "env.d.ts",
-    "src/**/*",
-    "src/**/*.vue",
-    "types/**/*.d.ts",
-    "types/**/*.ts"
-  ],
+  "extends": "@vue/tsconfig/tsconfig.json",
+  "include": ["env.d.ts", "src/**/*", "src/**/*.vue", "types/**/*.d.ts", "types/**/*.ts"],
   "exclude": ["node_modules", "dist", "**/*.js"],
   "compilerOptions": {
     "baseUrl": ".",
