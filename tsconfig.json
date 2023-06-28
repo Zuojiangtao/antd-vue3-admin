@@ -1,17 +1,12 @@
 {
-  "extends": "@vue/tsconfig/tsconfig.json",
+  "extends": "@vue/tsconfig/tsconfig.dom.json",
   "include": ["env.d.ts", "src/**/*", "src/**/*.vue", "types/**/*.d.ts", "types/**/*.ts"],
   "exclude": ["node_modules", "dist", "**/*.js"],
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
-    }
-  },
-
-  "references": [
-    {
-      "path": "./tsconfig.config.json"
-    }
-  ]
+    },
+    "types": ["ant-design-vue/typings/global"]
+  }
 }
