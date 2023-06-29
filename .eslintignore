@@ -1,15 +1,35 @@
 
-*.sh
-node_modules
-*.md
+*.json
+*.html
+*rc.js
+*.svg
 *.woff
 *.ttf
+*.css
+*.sh
+*.md
+
 .vscode
 .idea
-dist
-/public
-/docs
+
+package.json
+
+# Dependency directories
+node_modules/
+
+# local env files
+.env.local
+.env.*.local
+
 .husky
-.local
 /bin
-Dockerfile
+/deploy
+/dist
+/docs
+/public
+/src/assets
+/src/mock
+
+# deps exclude
+types/auto-imports.d.ts
+types/components.d.ts
