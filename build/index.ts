@@ -1,7 +1,7 @@
 import { PluginOption } from 'vite';
 import { isProd, isReport } from './utils';
 
-import { configLoaderMd } from './loader/mdComponent';
+// import { configLoaderMd } from './loader/mdComponent';
 import { configLoaderSvg } from './loader/svgComponent';
 
 import { configPluginHTML } from './plugin/html';
@@ -20,7 +20,7 @@ export function vitePluginConfig(viteEnv: ViteEnv) {
   const vitePlugins: (PluginOption | PluginOption[])[] = [];
 
   // vite-plugin-md
-  vitePlugins.push(configLoaderMd());
+  // vitePlugins.push(configLoaderMd());
 
   // vite-svg-loader
   vitePlugins.push(configLoaderSvg());
