@@ -9,7 +9,7 @@ import { configPluginAutoImport } from './plugin/autoImport';
 import { configPluginComponents } from './plugin/components';
 import { configPluginCDNImport } from './plugin/cdnImport';
 import { configPluginCompression } from './plugin/compression';
-import { configVisualizerConfig } from './plugin/visualizer';
+import { configPluginVisualizer } from './plugin/visualizer';
 
 export function vitePluginConfig(viteEnv: ViteEnv) {
   const { VITE_GLOB_APP_TITLE, VITE_APP_NODE_ENV, VITE_BUILD_COMPRESS } = viteEnv;
@@ -41,7 +41,7 @@ export function vitePluginConfig(viteEnv: ViteEnv) {
   isProdMode && vitePlugins.push(configPluginCompression(VITE_BUILD_COMPRESS));
 
   // rollup-plugin-visualizer
-  isReportMode && vitePlugins.push(configVisualizerConfig());
+  isReportMode && vitePlugins.push(configPluginVisualizer());
 
   return vitePlugins;
 }
