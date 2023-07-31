@@ -13,6 +13,8 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
 
   const viteEnv = loadEnv(mode, root);
 
+  const { VITE_DROP_CONSOLE } = viteEnv;
+
   return {
     plugins: [
       vue({ include: [/\.vue$/, /\.md$/] }),
@@ -24,6 +26,10 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
       alias: {
         '@': fileURLToPath(new URL('./src', import.meta.url)),
       },
+    },
+    esbuild: {
+      // 移除日志打印及debugger
+      drop: VITE_DROP_CONSOLE ? ['console', 'debugger'] : [],
     },
     // 处理ant-design-vue 样式文件
     css: {
