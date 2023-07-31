@@ -28,6 +28,7 @@
     "build": "run-p type-check build-only",
     "preview": "vite preview --port 4173",
     "build-only": "vite build",
+    "report": "cross-env REPORT=true npm run build",
     "type-check": "vue-tsc --noEmit",
     "clean:cache": "rimraf node_modules/.cache/ && rimraf node_modules/.vite",
     "clean:lib": "rimraf node_modules",
@@ -39,6 +40,7 @@
     "@ant-design/icons-vue": "^6.1.0",
     "@vueuse/core": "^10.2.0",
     "ant-design-vue": "4.0.0-rc.5",
+    "axios": "^1.4.0",
     "pinia": "^2.1.4",
     "vue": "^3.3.4",
     "vue-router": "^4.2.2"
@@ -53,6 +55,7 @@
     "@vue/eslint-config-prettier": "^7.1.0",
     "@vue/eslint-config-typescript": "^11.0.3",
     "@vue/tsconfig": "^0.4.0",
+    "cross-env": "^7.0.3",
     "eslint": "^8.43.0",
     "eslint-plugin-vue": "^9.15.1",
     "husky": "^8.0.3",
