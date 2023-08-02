@@ -3,5 +3,7 @@ import type { PluginOption } from 'vite';
 import svgLoader from 'vite-svg-loader';
 
 export function configLoaderSvg(): PluginOption | PluginOption[] {
-  return svgLoader();
+  return svgLoader({
+    defaultImport: 'url', // or 'raw'
+  });
 }
