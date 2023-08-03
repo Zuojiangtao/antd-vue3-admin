@@ -6,6 +6,8 @@
 
 A mid-backend development template project based on vue3, vite4 and ant-design-vue4. Using the latest vue3, vite4, TypeScript5 and other cutting-edge technologies, out-of-the-box front-end solutions can be used for learning and business development.
 
+![./preview.png](./preview.png)
+
 ## Recommended IDE Setup
 
 [VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).

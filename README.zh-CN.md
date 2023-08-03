@@ -6,6 +6,8 @@
 
 一个基于 vue3，vite4 和 ant-design-vue4 的中后台开发模板工程。使用最新的`vue3`, `vite4`, `TypeScript5`等前沿技术，开箱即用的前端解决方案，可用于学习及业务开发。
 
+![./preview.png](./preview.png)
+
 ## Recommended IDE Setup
 
 [VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (禁用 Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
