@@ -43,6 +43,7 @@
     "axios": "^1.4.0",
     "pinia": "^2.1.4",
     "vue": "^3.3.4",
+    "vue-demi": "^0.14.5",
     "vue-router": "^4.2.2"
   },
   "devDependencies": {
@@ -69,8 +70,8 @@
     "unplugin-auto-import": "^0.16.4",
     "unplugin-vue-components": "^0.25.1",
     "vite": "^4.3.9",
-    "vite-plugin-cdn-import": "^0.3.5",
     "vite-plugin-compression": "^0.5.1",
+    "vite-plugin-external-cdn": "^1.0.1",
     "vite-plugin-html": "^3.2.0",
     "vite-plugin-md": "^0.21.5",
     "vite-svg-loader": "^4.0.0",

@@ -1,9 +1,9 @@
 // https://github.com/MMF-FE/vite-plugin-cdn-import
 import type { PluginOption } from 'vite';
-import PluginImportToCDN, { autoComplete } from 'vite-plugin-cdn-import';
+import transformExternalCDN, { autoComplete } from 'vite-plugin-external-cdn';
 
 export function configPluginCDNImport(): PluginOption | PluginOption[] {
-  return PluginImportToCDN({
+  return transformExternalCDN({
     modules: [
       autoComplete('vue'), // vue2 使用 autoComplete('vue2')
       autoComplete('axios'),
@@ -16,16 +16,16 @@ export function configPluginCDNImport(): PluginOption | PluginOption[] {
         path: 'dist/vue-router.global.min.js',
       },
       {
+        name: 'vue-demi',
+        var: 'VueDemi',
+        version: '0.14.5',
+        path: 'lib/index.iife.min.js',
+      },
+      {
         name: 'pinia',
         var: 'Pinia',
         version: '2.0.36',
         path: 'dist/pinia.iife.min.js',
-      },
-      {
-        name: '@ant-design/icons-vue',
-        var: '@ant-design/icons-vue',
-        version: '6.1.0',
-        path: '+esm',
       },
     ],
   });
