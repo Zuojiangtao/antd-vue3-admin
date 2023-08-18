@@ -1,4 +1,4 @@
-// https://github.com/MMF-FE/vite-plugin-cdn-import
+// https://github.com/Zuojiangtao/vite-plugin-external-cdn
 import type { PluginOption } from 'vite';
 import transformExternalCDN, { autoComplete } from 'vite-plugin-external-cdn';
 
