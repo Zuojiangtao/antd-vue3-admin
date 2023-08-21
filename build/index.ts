@@ -9,6 +9,7 @@ import { configPluginAutoImport } from './plugin/autoImport';
 import { configPluginComponents } from './plugin/components';
 import { configPluginCDNImport } from './plugin/cdnImport';
 import { configPluginCompression } from './plugin/compression';
+import { configPluginImageOptimizer } from './plugin/imageOptimize';
 import { configPluginVisualizer } from './plugin/visualizer';
 
 export function vitePluginConfig(viteEnv: ViteEnv) {
@@ -39,6 +40,9 @@ export function vitePluginConfig(viteEnv: ViteEnv) {
 
   // vite-plugin-compression
   isProdMode && vitePlugins.push(configPluginCompression(VITE_BUILD_COMPRESS));
+
+  // vite-plugin-image-optimizer
+  isProdMode && vitePlugins.push(configPluginImageOptimizer());
 
   // rollup-plugin-visualizer
   isReportMode && vitePlugins.push(configPluginVisualizer());
