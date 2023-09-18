@@ -1,4 +1,4 @@
-import { PluginOption } from 'vite';
+import type { PluginOption } from 'vite';
 import { isProd, isReport } from './utils';
 
 // import { configLoaderMd } from './loader/mdComponent';
@@ -13,9 +13,16 @@ import { configPluginImageOptimizer } from './plugin/imageOptimize';
 import { configPluginVisualizer } from './plugin/visualizer';
 
 export function vitePluginConfig(viteEnv: ViteEnv) {
-  const { VITE_GLOB_APP_TITLE, VITE_APP_NODE_ENV, VITE_BUILD_COMPRESS } = viteEnv;
+  const {
+    VITE_USE_CDN,
+    VITE_GLOB_APP_TITLE,
+    VITE_APP_NODE_ENV,
+    VITE_BUILD_COMPRESS,
+    VITE_BUILD_COMPRESS_DELETE_ORIGIN_FILE,
+    VITE_USE_IMAGEMIN,
+  } = viteEnv;
 
-  const isProdMode = isProd(VITE_APP_NODE_ENV);
+  const isProdMode = isProd(VITE_APP_NODE_ENV ?? '');
   const isReportMode = isReport();
 
   const vitePlugins: (PluginOption | PluginOption[])[] = [];
@@ -27,7 +34,7 @@ export function vitePluginConfig(viteEnv: ViteEnv) {
   vitePlugins.push(configLoaderSvg());
 
   // vite-plugin-html
-  vitePlugins.push(configPluginHTML(VITE_GLOB_APP_TITLE));
+  vitePlugins.push(configPluginHTML(VITE_GLOB_APP_TITLE ?? ''));
 
   // unplugin-auto-import
   vitePlugins.push(configPluginAutoImport());
@@ -36,13 +43,14 @@ export function vitePluginConfig(viteEnv: ViteEnv) {
   vitePlugins.push(configPluginComponents());
 
   // vite-plugin-cdn-import
-  isProdMode && vitePlugins.push(configPluginCDNImport());
+  isProdMode && VITE_USE_CDN && vitePlugins.push(configPluginCDNImport());
 
   // vite-plugin-compression
-  isProdMode && vitePlugins.push(configPluginCompression(VITE_BUILD_COMPRESS));
+  isProdMode &&
+    vitePlugins.push(configPluginCompression(VITE_BUILD_COMPRESS ?? 'gzip', VITE_BUILD_COMPRESS_DELETE_ORIGIN_FILE));
 
   // vite-plugin-image-optimizer
-  isProdMode && vitePlugins.push(configPluginImageOptimizer());
+  isProdMode && VITE_USE_IMAGEMIN && vitePlugins.push(configPluginImageOptimizer());
 
   // rollup-plugin-visualizer
   isReportMode && vitePlugins.push(configPluginVisualizer());
