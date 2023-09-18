@@ -25,7 +25,6 @@ export function configPluginAutoImport(): PluginOption | PluginOption[] {
     ],
     // resolvers: [AntDesignVueResolver()],
     vueTemplate: true,
-    cache: true,
     dirs: ['src/hooks', 'src/components'],
     dts: 'types/auto-imports.d.ts',
   });
