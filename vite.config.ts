@@ -6,12 +6,13 @@ import vue from '@vitejs/plugin-vue';
 import vueJsx from '@vitejs/plugin-vue-jsx';
 
 import { vitePluginConfig } from './build';
+import { transformEnvConfType } from './build/utils';
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
   const root = process.cwd();
 
-  const viteEnv = loadEnv(mode, root);
+  const viteEnv = transformEnvConfType(loadEnv(mode, root));
 
   const { VITE_DROP_CONSOLE } = viteEnv;
 

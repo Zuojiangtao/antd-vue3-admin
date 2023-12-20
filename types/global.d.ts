@@ -1,6 +1,8 @@
 export {};
 
 declare global {
+  type Recordable<T = any> = Record<string, T>;
+
   interface ViteEnv {
     VITE_APP_NODE_ENV?: string;
     VITE_PORT?: number;
