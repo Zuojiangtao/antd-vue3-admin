@@ -4,7 +4,7 @@ import { ViteImageOptimizer } from 'vite-plugin-image-optimizer';
 
 export function configPluginImageOptimizer(): PluginOption | PluginOption[] {
   return ViteImageOptimizer({
-    cache: true,
-    cacheLocation: './node_modules/.cache/imageOptimizer',
+    // cache: true,
+    // cacheLocation: './node_modules/.cache/imageOptimizer',
   });
 }
