@@ -7,7 +7,7 @@ export function configPluginCDNImport(): PluginOption | PluginOption[] {
     modules: [
       autoComplete('vue'), // vue2 使用 autoComplete('vue2')
       autoComplete('axios'),
-      // autoComplete('@vueuse/shared'),
+      autoComplete('@vueuse/shared'),
       autoComplete('@vueuse/core'),
       {
         name: 'vue-router',
