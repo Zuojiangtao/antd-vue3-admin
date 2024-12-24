@@ -7,6 +7,7 @@ import vueJsx from '@vitejs/plugin-vue-jsx';
 
 import { vitePluginConfig } from './build';
 import { transformEnvConfType } from './build/utils';
+import { createProxy } from './build/proxy';
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
@@ -14,7 +15,7 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
 
   const viteEnv = transformEnvConfType(loadEnv(mode, root));
 
-  const { VITE_DROP_CONSOLE } = viteEnv;
+  const { VITE_DROP_CONSOLE, VITE_PORT, VITE_PROXY } = viteEnv;
 
   return {
     plugins: [
@@ -28,6 +29,14 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
         '@': fileURLToPath(new URL('./src', import.meta.url)),
         '#': fileURLToPath(new URL('./types', import.meta.url)),
       },
+    },
+    server: {
+      https: false,
+      // Listening on all local IPs
+      host: true,
+      port: VITE_PORT,
+      // Load proxy configuration from .env
+      proxy: createProxy(VITE_PROXY),
     },
     esbuild: {
       // 移除日志打印及debugger
