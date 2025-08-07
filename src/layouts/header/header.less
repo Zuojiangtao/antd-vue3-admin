@@ -1,0 +1,49 @@
+.header-content {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+
+  .header-right-content {
+    width: 250px;
+    max-width: 500px;
+    height: 100%;
+    overflow-x: hidden;
+    display: flex;
+    justify-content: right;
+    align-items: center;
+    position: absolute;
+    top: 0;
+    right: 0;
+
+    .content-avatar {
+      width: 100px;
+      display: inline-flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .ant-avatar-image {
+        border: 1px solid #f8f8f8;
+      }
+    }
+
+    .anticon {
+      width: 36px;
+      height: 36px;
+      line-height: 36px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 1px solid #e8e8e8;
+      font-size: 20px;
+      text-align: center;
+      background-color: #f8f8f8;
+      cursor: pointer;
+      display: inline-flex;
+      justify-content: center;
+
+      &:hover {
+        background-color: #e8e8e8;
+      }
+    }
+  }
+}

@@ -1,0 +1,30 @@
+.site-layout .site-layout-background {
+  background: #fff;
+}
+//[data-theme='dark'] .site-layout .site-layout-background {
+//  background: #141414;
+//}
+.@{ant-prefix}-layout {
+  overflow: hidden;
+  height: 100vh;
+  :deep(.@{ant-prefix}-layout-sider) {
+    float: left;
+    background-color: #ffffff;
+    padding: 0;
+    height: 100%;
+    .@{ant-prefix}-menu {
+      height: calc(100% - 64px - 48px);
+    }
+  }
+  :deep(.@{ant-prefix}-layout-sider-trigger) {
+    position: sticky;
+    border-top: 1px solid #e8e8e8;
+  }
+  :deep(.@{ant-prefix}-layout-header) {
+    height: 64px;
+    line-height: 64px;
+    background-color: #ffffff;
+    padding: 0 16px;
+    box-shadow: 0 1px 4px rgba(0, 21, 41, 0.1);
+  }
+}

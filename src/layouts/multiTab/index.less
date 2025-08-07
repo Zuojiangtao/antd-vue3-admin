@@ -1,0 +1,36 @@
+.ant-pro-multi-tab.global-header {
+  width: 100%;
+  height: 40px;
+  position: sticky;
+  top: 64px;
+  z-index: 8;
+  display: inline-flex;
+  align-items: center;
+  overflow: hidden;
+
+  .@{ant-prefix}-tabs {
+    width: 100%;
+    margin-top: 4px;
+
+    .@{ant-prefix}-tabs-tab {
+      border-radius: 4px;
+      padding: 0 16px;
+      height: 32px;
+      line-height: 32px;
+      background-color: #fafafa;
+    }
+  }
+}
+
+.@{ant-prefix}-tabs-top > .@{ant-prefix}-tabs-nav::before,
+.@{ant-prefix}-tabs-bottom > .@{ant-prefix}-tabs-nav::before,
+.@{ant-prefix}-tabs-top > div > .@{ant-prefix}-tabs-nav::before,
+.@{ant-prefix}-tabs-bottom > div > .@{ant-prefix}-tabs-nav::before {
+  border-bottom: none !important;
+}
+
+.@{ant-prefix}-tabs-card.@{ant-prefix}-tabs-top > .@{ant-prefix}-tabs-nav .@{ant-prefix}-tabs-tab-active,
+.@{ant-prefix}-tabs-card.@{ant-prefix}-tabs-top > div > .@{ant-prefix}-tabs-nav .@{ant-prefix}-tabs-tab-active {
+  //border-bottom-color: #ffffff;
+  background-color: #ffffff;
+}
