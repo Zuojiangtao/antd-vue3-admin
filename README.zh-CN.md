@@ -4,7 +4,7 @@
 
 ## 简介
 
-一个基于 vue3，vite4 和 ant-design-vue4 的中后台开发模板工程。使用最新的`vue3`, `vite4`, `TypeScript5`等前沿技术，开箱即用的前端解决方案，可用于学习及业务开发。
+一个基于 vue3，vite6 和 ant-design-vue4 的中后台开发模板工程。使用最新的`vue3`, `vite4`, `TypeScript5`等前沿技术，开箱即用的前端解决方案，可用于学习及业务开发。
 
 ![./preview.png](./preview.png)
 
