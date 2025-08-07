@@ -4,11 +4,13 @@ import transformExternalCDN, { autoComplete } from 'vite-plugin-external-cdn';
 
 export function configPluginCDNImport(): PluginOption | PluginOption[] {
   return transformExternalCDN({
+    prodUrl: 'https://cdnjs.h3c.com/{name}/{version}/{path}',
     modules: [
       autoComplete('vue'), // vue2 使用 autoComplete('vue2')
       autoComplete('axios'),
       autoComplete('@vueuse/shared'),
       autoComplete('@vueuse/core'),
+      autoComplete('dayjs'),
       {
         name: 'vue-router',
         var: 'VueRouter',
@@ -18,13 +20,13 @@ export function configPluginCDNImport(): PluginOption | PluginOption[] {
       {
         name: 'vue-demi',
         var: 'VueDemi',
-        version: '0.14.7',
+        version: '0.14.10',
         path: 'lib/index.iife.min.js',
       },
       {
         name: 'pinia',
         var: 'Pinia',
-        version: '2.1.7',
+        version: '2.3.1',
         path: 'dist/pinia.iife.min.js',
       },
     ],
