@@ -1,3 +1,11 @@
 {
-  "recommendations": ["Vue.Vue-Official", "EditorConfig.EditorConfig"]
+  "recommendations": [
+    "Vue.volar",
+    "Vue.vscode-typescript-vue-plugin",
+    "EditorConfig.EditorConfig",
+    "dbaeumer.vscode-eslint",
+    "mrmlnc.vscode-less",
+    "antfu.iconify",
+    "mikestead.dotenv"
+  ]
 }
