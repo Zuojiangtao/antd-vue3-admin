@@ -69,8 +69,13 @@ declare global {
   const useAttrs: typeof import('vue')['useAttrs']
   const useCssModule: typeof import('vue')['useCssModule']
   const useCssVars: typeof import('vue')['useCssVars']
+  const useCurd: typeof import('../src/hooks/useCurd')['useCurd']
   const useDark: typeof import('@vueuse/core')['useDark']
   const useDebounceFn: typeof import('@vueuse/core')['useDebounceFn']
+  const useDeepClone: typeof import('../src/hooks/useDeepClone')['useDeepClone']
+  const useEcharts: typeof import('../src/hooks/useEcharts')['useEcharts']
+  const useForm: typeof import('../src/hooks/useForm')['useForm']
+  const useFormModel: typeof import('../src/hooks/useFormModel')['useFormModel']
   const useId: typeof import('vue')['useId']
   const useLink: typeof import('vue-router')['useLink']
   const useModel: typeof import('vue')['useModel']
@@ -80,6 +85,7 @@ declare global {
   const useRoute: typeof import('vue-router')['useRoute']
   const useRouter: typeof import('vue-router')['useRouter']
   const useSlots: typeof import('vue')['useSlots']
+  const useTable: typeof import('../src/hooks/useTable')['useTable']
   const useTemplateRef: typeof import('vue')['useTemplateRef']
   const useTitle: typeof import('@vueuse/core')['useTitle']
   const watch: typeof import('vue')['watch']
@@ -162,7 +168,12 @@ declare module 'vue' {
     readonly useAttrs: UnwrapRef<typeof import('vue')['useAttrs']>
     readonly useCssModule: UnwrapRef<typeof import('vue')['useCssModule']>
     readonly useCssVars: UnwrapRef<typeof import('vue')['useCssVars']>
+    readonly useCurd: UnwrapRef<typeof import('../src/hooks/useCurd')['useCurd']>
     readonly useDebounceFn: UnwrapRef<typeof import('@vueuse/core')['useDebounceFn']>
+    readonly useDeepClone: UnwrapRef<typeof import('../src/hooks/useDeepClone')['useDeepClone']>
+    readonly useEcharts: UnwrapRef<typeof import('../src/hooks/useEcharts')['useEcharts']>
+    readonly useForm: UnwrapRef<typeof import('../src/hooks/useForm')['useForm']>
+    readonly useFormModel: UnwrapRef<typeof import('../src/hooks/useFormModel')['useFormModel']>
     readonly useId: UnwrapRef<typeof import('vue')['useId']>
     readonly useLink: UnwrapRef<typeof import('vue-router')['useLink']>
     readonly useModel: UnwrapRef<typeof import('vue')['useModel']>
@@ -170,6 +181,7 @@ declare module 'vue' {
     readonly useRoute: UnwrapRef<typeof import('vue-router')['useRoute']>
     readonly useRouter: UnwrapRef<typeof import('vue-router')['useRouter']>
     readonly useSlots: UnwrapRef<typeof import('vue')['useSlots']>
+    readonly useTable: UnwrapRef<typeof import('../src/hooks/useTable')['useTable']>
     readonly useTemplateRef: UnwrapRef<typeof import('vue')['useTemplateRef']>
     readonly useTitle: UnwrapRef<typeof import('@vueuse/core')['useTitle']>
     readonly watch: UnwrapRef<typeof import('vue')['watch']>
