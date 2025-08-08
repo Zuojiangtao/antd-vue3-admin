@@ -20,10 +20,7 @@
   import Sider from './sider/LayoutSider.vue';
   import GlobalHeader from '@/layouts/header/GlobalHeader';
   import MultiTab from '@/layouts/multiTab/MultiTab';
-  import { qiankunWindow } from 'vite-plugin-qiankun/es/helper';
   import { useKeepAliveStore } from '@/stores/keep-alive';
-
-  const injectInQiankun = computed(() => qiankunWindow.__POWERED_BY_QIANKUN__); // 是否作为qiankun子应用
 
   const getLayoutContentStyle = computed((): CSSProperties => {
     const cssProps = reactive({
@@ -31,16 +28,10 @@
       padding: '16px',
       overflowY: 'overlay',
     });
-    if (injectInQiankun.value) {
-      return {
-        ...cssProps,
-      };
-    } else {
-      return {
-        ...cssProps,
-        margin: '4px 16px 16px',
-      };
-    }
+    return {
+      ...cssProps,
+      margin: '4px 16px 16px',
+    };
   });
 
   provide('theme', ref('light'));

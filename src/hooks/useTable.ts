@@ -1,6 +1,5 @@
 import { ref, reactive } from 'vue';
 import type { PaginationType } from 'ant-design-vue';
-import { qiankunWindow } from 'vite-plugin-qiankun/es/helper';
 
 export function useTable() {
   // 表格
@@ -37,19 +36,11 @@ export function useTable() {
 
   // 动态计算表格滚动高度 - 不分页
   const calcTableScrollYHeightWithoutPagination = computed(() => {
-    if (qiankunWindow.__POWERED_BY_QIANKUN__) {
-      return document.body.clientHeight - 154;
-    } else {
-      return document.body.clientHeight - 245;
-    }
+    return document.body.clientHeight - 245;
   });
   // 动态计算表格滚动高度 - 分页
   const calcTableScrollYHeightWithPagination = computed(() => {
-    if (qiankunWindow.__POWERED_BY_QIANKUN__) {
-      return document.body.clientHeight - 218;
-    } else {
-      return document.body.clientHeight - 309;
-    }
+    return document.body.clientHeight - 309;
   });
 
   return {
