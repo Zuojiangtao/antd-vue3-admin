@@ -1,0 +1,7 @@
+ignoredBuiltDependencies:
+  - esbuild
+
+onlyBuiltDependencies:
+  - core-js
+  - sharp
+  - vue-demi
