@@ -4,7 +4,9 @@
 
 ## Introduction
 
-A mid-backend development template project based on vue3, vite4 and ant-design-vue4. Using the latest vue3, vite6, TypeScript5 and other cutting-edge technologies, out-of-the-box front-end solutions can be used for learning and business development.
+A mid-backend development template project based on vue3, vite7 and ant-design-vue4. Using the latest vue3, vite7, TypeScript5 and other cutting-edge technologies, out-of-the-box front-end solutions can be used for learning and business development.
+
+> node >= 20 | node 22+
 
 ![./preview.png](./preview.png)
 
