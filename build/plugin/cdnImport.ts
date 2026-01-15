@@ -4,7 +4,6 @@ import transformExternalCDN, { autoComplete } from 'vite-plugin-external-cdn';
 
 export function configPluginCDNImport(): PluginOption | PluginOption[] {
   return transformExternalCDN({
-    prodUrl: 'https://cdnjs.h3c.com/{name}/{version}/{path}',
     modules: [
       autoComplete('vue'), // vue2 使用 autoComplete('vue2')
       autoComplete('axios'),
