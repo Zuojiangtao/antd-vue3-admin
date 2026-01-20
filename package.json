@@ -90,7 +90,7 @@
     "unplugin-vue-components": "~28.4.1",
     "vite": "~7.2.7",
     "vite-plugin-compression": "^0.5.1",
-    "vite-plugin-external-cdn": "^1.0.3",
+    "vite-plugin-external-cdn": "^1.1.1",
     "vite-plugin-html": "^3.2.2",
     "vite-plugin-image-optimizer": "^1.1.8",
     "vite-svg-loader": "^5.1.0",

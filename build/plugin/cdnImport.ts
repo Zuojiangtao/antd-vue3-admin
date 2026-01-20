@@ -10,23 +10,13 @@ export function configPluginCDNImport(): PluginOption | PluginOption[] {
       autoComplete('@vueuse/shared'),
       autoComplete('@vueuse/core'),
       autoComplete('dayjs'),
-      {
-        name: 'vue-router',
-        var: 'VueRouter',
-        version: '4.5.0',
-        path: 'dist/vue-router.global.min.js',
-      },
+      autoComplete('vue-router'),
+      autoComplete('pinia'),
       {
         name: 'vue-demi',
         var: 'VueDemi',
         version: '0.14.10',
         path: 'lib/index.iife.min.js',
-      },
-      {
-        name: 'pinia',
-        var: 'Pinia',
-        version: '2.3.1',
-        path: 'dist/pinia.iife.min.js',
       },
     ],
   });
