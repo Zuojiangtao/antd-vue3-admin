@@ -1,0 +1,77 @@
+---
+name: plugin
+type: "type_components_import"
+description: "项目开发插件使用规则 - 自动导入白名单"
+globs: "**/*.{vue,tsx,ts,jsx,js}"
+alwaysApply: true
+priority: 200
+
+updatedAt: 2026-08-18T00:00:00.000Z
+provider: "IT Team"
+author: "zuojt"
+---
+
+# 自动导入规则（代码生成时务必遵守）
+
+本项目使用 `unplugin-auto-import`（配置见 `build/plugin/autoImport.ts`）和 `unplugin-vue-components`（配置见 `build/plugin/components.ts`）自动导入，**禁止手动 import 以下内容**：
+
+> **强制执行**：`src/views/**` 下的违规导入已由 ESLint `no-restricted-imports`（`.eslintrc.js` overrides）拦截，`pnpm lint` 会直接报错；其余目录（stores/hooks/layouts 等历史代码）暂靠人工遵守。
+
+## 禁止手动 import 的 API
+
+| 来源 | 内容 | 示例 |
+|------|------|------|
+| `vue` | 所有 Composition API 与编译宏 | `ref`, `reactive`, `computed`, `unref`, `watch`, `watchEffect`, `onMounted`, `onActivated`, `nextTick`, `inject`, `provide`, `defineComponent`, `defineAsyncComponent`, `toRef`, `toRefs`, `h`... |
+| `vue-router` | 路由 API | `useRouter`, `useRoute`, `onBeforeRouteLeave`, `onBeforeRouteUpdate` |
+| `pinia` | 状态管理 API | `defineStore`, `createPinia`, `storeToRefs`, `getActivePinia`, `mapActions`, `mapGetters`, `mapState`, `mapStores`, `mapWritableState` |
+| `@vueuse/core` | 已配置的 hooks（仅白名单 3 个） | `useMouse`, `useTitle`, `useDebounceFn`（其余 VueUse hooks 需手动 import） |
+| `axios` | 默认导出 | `axios` |
+| `src/hooks/` | 所有项目 hooks | `useCurd`, `useTable`, `useForm`, `useFormModel`, `useEcharts`, `useDeepClone` |
+| `src/components/` | 所有公共组件 | 无需手动注册 |
+
+## 需要手动 import 的内容（易错点）
+
+- **ant-design-vue 的函数式 API 不在自动导入范围**，需手动导入：`import { message, Modal, notification } from 'ant-design-vue';`
+- 类型导入使用 `import type`：如 `import type { Rule } from 'ant-design-vue/es/form';`
+- `@vueuse/core` 中白名单之外的 hooks（如 `useStorage`、`useClipboard` 等）需手动导入
+- 项目内业务模块（`src/api/`、`src/utils/`、`src/stores/`、`@/layouts/`）需手动导入
+- hooks 源码内部互相引用（如 `useCurd.ts` 内 `import { useTable } from '@/hooks/useTable'`）保持显式导入即可
+
+## 禁止手动 import 的组件
+
+| 来源 | 示例 |
+|------|------|
+| `ant-design-vue` | 所有 `A-` 前缀组件：`AButton`, `ATable`, `AModal`, `AForm`, `AFormItem`, `AInput`, `ASelect`, `ATree`, `ASpace`, `ASpin`, `ASwitch`, `ATooltip`, `ARow`, `ACol`, `AConfigProvider`, `ADivider`, `ALayout`, `ALayoutContent`, `ALayoutSider`, `APopconfirm`, `ARadio`, `ARadioGroup`, `ASelectOption`, `ATextarea`, `AInputNumber`, `AInputPassword`, `AInputSearch` |
+| `@ant-design/icons-vue` | 所有图标组件（如 `InfoCircleOutlined`） |
+| `vue-router` | `RouterLink`, `RouterView` |
+
+## 生成的文件（请勿手动修改）
+
+- `types/auto-imports.d.ts` — 自动导入的 API 类型声明
+- `types/components.d.ts` — 自动导入的组件类型声明
+
+## 示例
+
+```vue
+<script setup lang="ts">
+// ❌ 错误 —— 不需要手动 import
+// import { ref, reactive, computed, onMounted } from 'vue';
+// import { useRouter } from 'vue-router';
+// import { defineStore } from 'pinia';
+// import { AButton, ATable, AModal } from 'ant-design-vue';
+// import { useCurd } from '@/hooks/useCurd';
+
+// ✅ 正确 —— 直接用就行
+const count = ref(0);
+const state = reactive({ name: '' });
+const router = useRouter();
+const { data, loading, pagination } = useCurd(curdMethod, query);
+onMounted(() => {
+  // ...
+});
+
+// ✅ message/Modal 等函数式 API 需手动导入
+import { message } from 'ant-design-vue';
+const notify = () => message.success('操作成功');
+</script>
+```

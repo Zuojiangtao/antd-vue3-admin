@@ -1,0 +1,28 @@
+{
+  "mcpServers": {
+    "MasterGo Magic MCP": {
+      "timeout": 60000,
+      "command": "npx",
+      "args": [
+        "-y",
+        "@mastergo/magic-mcp",
+        "--token=mg_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+        "--url=https://mastergo.com"
+      ],
+      "type": "stdio",
+      "disabled": false
+    },
+    "Apifox Mcp Server": {
+      "timeout": 60000,
+      "command": "cmd",
+      "args": ["/c", "npx", "-y", "apifox-mcp-server@latest", "--oas=https://your-server-api.com/v2/api-docs"],
+      "type": "stdio",
+      "disabled": false
+    },
+    "codegraph": {
+      "type": "stdio",
+      "command": "codegraph",
+      "args": ["serve", "--mcp"]
+    }
+  }
+}

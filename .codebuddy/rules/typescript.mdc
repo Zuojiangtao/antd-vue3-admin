@@ -1,0 +1,177 @@
+---
+name: typescript
+description: Vue 3 + TypeScript 类型安全最佳实践
+globs: "**/*.{ts,tsx,vue}"
+alwaysApply: false
+priority: 3
+
+updatedAt: 2026-08-18T00:00:00.000Z
+provider: "IT Team"
+author: "zuojt"
+---
+
+# TypeScript 最佳实践
+
+本指南面向 Vue 3 + TypeScript 项目，确保严格类型安全和代码可维护性。类型检查命令：`pnpm type-check`（vue-tsc）。
+
+## 1. 类型定义规范
+
+### 1.1 接口 vs 类型别名
+
+- **接口 (interface)**：用于定义对象结构、组件 Props、API 响应体
+- **类型别名 (type)**：用于联合类型、交叉类型、函数签名、元组
+
+```typescript
+// ✅ 对象结构使用 interface
+interface UserProfile {
+  id: string;
+  name: string;
+  email: string;
+  role: UserRole;
+  createdAt: string;
+}
+
+// ✅ 联合类型使用 type
+type UserRole = 'admin' | 'user' | 'guest';
+type ApiResponse<T> = { code: number; data: T; message: string };
+
+// ✅ 组件 Props 使用 interface
+interface Props {
+  title: string;
+  loading?: boolean;
+  data?: UserProfile[];
+}
+```
+
+### 1.2 类型文件组织
+
+- 全局通用类型定义放在 `types/` 目录下（`#` 路径别名指向 `types/`；`auto-imports.d.ts`、`components.d.ts` 为生成文件，勿改）
+- 模块私有类型定义在模块文件内部
+- API 接口的请求/响应类型与接口函数放在同一文件（`src/api/<module>.ts`）
+
+## 2. 组件 Props 与 Emits 类型定义
+
+### 2.1 Props 定义（Vue 3 Composition API）
+
+```vue
+<script setup lang="ts">
+interface Props {
+  title: string;
+  data?: UserProfile[];
+  loading?: boolean;
+  pageSize?: number;
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  data: () => [],
+  loading: false,
+  pageSize: 10,
+});
+</script>
+```
+
+### 2.2 Emits 定义
+
+```vue
+<script setup lang="ts">
+const emit = defineEmits<{
+  (e: 'update:modelValue', value: string): void;
+  (e: 'submit', data: Record<string, unknown>): void;
+  (e: 'delete', id: string): void;
+}>();
+</script>
+```
+
+## 3. 避免使用 any
+
+`any` 会绕过全部类型检查，应尽量避免。
+
+```typescript
+// ❌ 错误
+const data: any = apiResponse;
+function process(input: any): any {
+  return input;
+}
+
+// ✅ 正确：使用 unknown 并在运行时校验
+function process(input: unknown): unknown {
+  if (typeof input === 'string') {
+    return input.toUpperCase();
+  }
+  throw new Error('Invalid input type');
+}
+
+// ✅ 正确：使用具体类型
+interface ApiData {
+  id: string;
+  name: string;
+}
+function process(input: ApiData): ApiData {
+  return input;
+}
+```
+
+> **注意**：本项目 ESLint 规则中 `@typescript-eslint/no-explicit-any` 为关闭状态（值为 0），因此不会自动报错。但仍需开发者自觉避免使用 `any`。
+
+## 4. 泛型使用
+
+编写可复用的工具函数时应使用泛型：
+
+```typescript
+// ✅ 通用请求函数
+function request<T>(url: string, params?: Record<string, unknown>): Promise<T> {
+  return axios.get(url, { params }).then(res => res.data as T);
+}
+
+// ✅ 通用 Hook 返回值
+interface CurdResult<T> {
+  data: T[];
+  loading: boolean;
+  pagination: { current: number; pageSize: number; total: number };
+  fetchData: () => Promise<void>;
+}
+```
+
+## 5. 类型守卫与空值检查
+
+```typescript
+// ✅ 运行时类型守卫
+function isUserProfile(obj: unknown): obj is UserProfile {
+  return typeof obj === 'object' && obj !== null && 'id' in obj && 'name' in obj && 'email' in obj;
+}
+
+// ✅ 可选链和空值合并
+const userName = user?.profile?.name ?? 'Unknown';
+const items = response?.data?.list ?? [];
+
+// ✅ 非空断言仅在确定不为空时使用（ESLint 已放宽该规则，但仍应克制）
+const element = document.getElementById('app')!;
+```
+
+## 6. 枚举与常量使用规范
+
+项目当前无统一枚举目录。约定如下：
+
+```typescript
+// ✅ 优先使用字符串/数字字面量联合类型
+type MenuType = 'MENU' | 'BUTTON';
+type SearchType = 1 | 2;
+
+// ✅ 需要值与描述映射时使用 as const 对象
+// （禁止使用 const enum —— Vite/esbuild 下 const enum 跨文件不可靠，行为同普通 enum）
+export const APP_ENUM = {
+  DEFAULT_PAGE_SIZE: 10,
+  DEFAULT_CURRENT: 1,
+} as const;
+
+// ✅ 枚举复用场景增多后，抽取到 src/enums/<module>.ts（按需创建）
+```
+
+## 7. 禁止事项
+
+- **禁止**在任何新代码中使用 `any`（历史代码中已存在的不强制修改）
+- **禁止**使用 `const enum`（esbuild/isolatedModules 下跨文件行为不可靠），改用 `as const` 对象或字面量联合类型
+- **禁止**使用 `@ts-ignore` 绕过类型检查，应使用 `@ts-expect-error` 并附带说明注释（ESLint 已放宽 `ban-ts-comment`，人工审查仍执行此标准）
+- **禁止**在 `.ts/.vue` 文件中使用 JSDoc `@type` 注解代替原生 TS 类型（仅在 `.js` 文件降级兼容时使用）
+- **禁止**导出未使用的类型定义
+- **禁止**在环境变量访问中使用 `process.env`，统一使用 `import.meta.env`

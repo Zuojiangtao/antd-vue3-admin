@@ -1,0 +1,85 @@
+---
+name: ant-design-vue最佳实践
+type: "project_rule"
+description: "AI 开发 ant-design-vue 使用规则 - 智能化企业级标准"
+globs: "**/*.{vue,tsx,ts,jsx,js}"
+alwaysApply: false
+priority: 500
+
+updatedAt: 2026-08-18T00:00:00.000Z
+provider: "IT Team"
+author: "zuojt"
+---
+
+# Ant Design Vue 最佳实践
+
+本指南概述了在项目中使用 Ant Design Vue v4.2.x 的权威最佳实践。遵循这些标准可确保代码库的一致性、可访问性和可维护性。
+
+## 1. 组件使用规范
+
+### 1.1 组件命名
+- 模板中使用 kebab-case（`<a-button>`）或 PascalCase（`<AButton>`）均可，同一文件内保持一致
+- 组件名称应简洁明了，能够准确描述组件的功能
+
+### 1.2 组件注册
+- 本项目使用了自动导入插件 `unplugin-vue-components`，在 `.vue` 文件中可直接使用 `A-` 前缀组件和 `@ant-design/icons-vue` 图标，不需要手动注册
+- 自动生成的类型文件在 `types/components.d.ts`，不要手动修改
+- **函数式 API 除外**：`message`、`Modal`、`notification` 需手动 `import { message } from 'ant-design-vue'`
+
+### 1.3 组件封装
+- 封装组件属性名称应使用驼峰命名法（CamelCase）
+- 封装组件应放在 `src/components/` 目录下（自动全局可用）或页面同级 `_components/` 目录下（模块私有，需手动 import）
+- 日期组件统一搭配 `dayjs`（项目已内置，勿引入 moment）
+
+## 2. 样式使用规范
+
+### 2.1 样式命名
+- 样式类名应使用中划线命名法（kebab-case）
+- 项目使用 Less 预编译语法
+- 一般情况下不用 Less 变量，除非需要在多个地方使用相同的变量值
+
+### 2.2 样式使用
+1. 在开发某个页面时，请先在 Ant Design Vue 文档中搜索是否有相同的组件/样式，如果有，请直接使用
+2. 直接使用 Ant Design Vue 的组件不需要更改样式，即使组件和设计稿不一致，也无需更改样式
+3. 如果需要更改样式，请先在项目中搜索是否有相同的样式覆盖，如果有，请直接复用
+4. 如需新增全局样式覆盖，统一放在 `src/assets/styles/`（按需创建），并全局引入；禁止散落在各页面
+5. 自定义组件的样式写在 `.vue` 文件的 `<style lang="less" scoped>` 标签中，使用 `scoped` 限定区间
+6. 自定义组件且样式超过 50 行时，在当前文件的兄弟目录 `_components` 下写独立的 `.less` 样式文件，并使用 `@import` 引入
+
+## 3. 代码风格规范
+
+- 使用 `<script setup lang="ts">` 语法糖编写组件逻辑
+- 表单组件统一使用 `<a-form>` + `<a-form-item>` 结构
+- 表格组件统一使用 `<a-table>` 并通过 `columns` + `dataSource` 属性配置
+- 弹窗组件统一使用 `<a-modal>`，设置 `:maskClosable="false"` 防止误关闭
+- 消息提示统一使用 `message.success()` / `message.error()` / `message.info()`（需手动导入）
+- 确认操作统一使用 `Modal.confirm()` 或 `useCurd` hook 提供的 `showDelTableFormDialog` 方法
+
+## 4. 最佳实践
+
+### 4.1 表单验证
+```vue
+<script setup lang="ts">
+import type { Rule } from 'ant-design-vue/es/form';
+
+const rules: Record<string, Rule[]> = {
+  name: [
+    { required: true, message: '请输入名称', trigger: 'blur' },
+    { min: 2, max: 50, message: '名称长度在 2-50 个字符', trigger: 'blur' },
+  ],
+};
+</script>
+```
+
+### 4.2 树形数据展示
+- 使用 `<a-tree>` 或 `<a-tree-select>` 处理树形结构数据
+- 树形表格使用 `<a-table>` 的 `children` 列或自定义展开
+
+### 4.3 权限控制
+- 路由级权限使用 `src/stores/permission.ts` 的 `usePermissionStore`（区分 `constantRouterMap`/`asyncRouterMap`）
+- 按钮级权限：通过当前用户权限数据 + `v-if` 控制（如后续封装权限指令/hook，以实际封装为准）
+- 操作列按钮使用 `<a>` 标签 + `<a-divider type="vertical" />` 分隔
+
+### 4.4 响应式布局
+- 搜索表单使用 `<a-row>` + `<a-col>` 栅格布局
+- 表单栅格默认使用 `:span="8"`（三列布局）

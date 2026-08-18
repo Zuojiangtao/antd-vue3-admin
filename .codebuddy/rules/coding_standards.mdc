@@ -1,0 +1,80 @@
+---
+name: coding_standards
+type: "project_rule"
+description: 编码规范指南
+globs: "**/*.{vue,tsx,ts,jsx,js}"
+alwaysApply: true
+priority: 1
+
+updatedAt: 2026-08-18T00:00:00.000Z
+provider: "IT Team"
+author: "zuojt"
+---
+
+# 编码规范指南
+
+> 项目结构、技术栈、路由、状态管理、API 请求等完整项目信息请参见 `AGENTS.md`。
+> 代码风格由 ESLint/Prettier 工具强制（`.eslintrc.js` / `.prettierrc`），生成代码直接遵循其格式，无需规则复述。
+> 自动导入规则（禁止手动 import 的 API/组件）请参见 `type_components_import` 规则（核心部分已由 ESLint `no-restricted-imports` 强制 `src/views/**`）。
+
+## 文件命名规范
+
+- Vue 组件文件：使用 PascalCase 命名（如：`UserProfile.vue`）
+- TypeScript 文件：使用 camelCase 命名（如：`userService.ts`）
+- 目录命名：使用 kebab-case 命名（如：`user-management/`）
+
+## 目录组织规范
+
+- 页面视图：`src/views/<模块名>/index.vue`，模块私有子组件放同级 `_components/` 目录
+- 全局公共组件：`src/components/`（经 unplugin 自动导入，全局可用）
+- 路由模块：`src/router/module/<模块名>.ts`，新增后合入 `asyncRouterMap`
+- API 模块：`src/api/<模块名>.ts`（新建目录），请求统一走 `src/utils/request.ts`
+- 状态模块：`src/stores/<模块名>.ts`，并在 `src/stores/index.ts` 统一导出
+- 业务 hooks：`src/hooks/use<Name>.ts`（经 unplugin 自动导入）
+
+## 脚手架遗留文件处理
+
+`HelloWorld.vue`、`TheWelcome.vue`、`WelcomeItem.vue`、`HomeView.vue`、`AboutView.vue`、`stores/counter.ts` 为 create-vue 模板遗留文件，开发对应功能时**替换而非沿用**，不要在新代码中引用它们。
+
+## 资源文件管理规范
+
+### 强制要求
+
+**资源文件存放位置：**
+- 所有静态资源文件必须放置在 `src/assets/` 目录下
+- 禁止在项目根目录创建 assets 文件夹
+- 禁止在其他目录直接放置资源文件
+
+**目录结构规范：**
+- 图片文件：`src/assets/images/`
+- 图标文件：`src/assets/icons/`（SVG 图标经 `vite-svg-loader` 按组件方式使用）
+- 字体文件：`src/assets/fonts/`
+- 其他资源：`src/assets/` 按类型分类存放
+
+**路径引用规范：**
+- 代码中引用资源时统一使用 `@/assets/` 路径别名
+- 禁止使用相对路径或绝对路径直接引用
+
+### 错误示例（禁止行为）
+
+```
+assets/              ❌ 禁止在根目录创建
+public/images/       ❌ 禁止在 public 目录放置资源
+src/views/images/    ❌ 禁止在 views 目录放置资源
+```
+
+### 正确示例
+
+```
+src/assets/icons/    ✅ 正确位置
+src/assets/images/   ✅ 正确位置
+src/assets/fonts/    ✅ 正确位置
+```
+
+### 验证检查
+
+在每次生成或修改资源文件后，必须执行以下检查：
+- 确保没有资源文件存在于根目录
+- 确保所有资源文件都在 `src/assets/` 目录下
+- 确保代码中使用 `@/assets/` 路径引用
+- 如果发现违规，必须立即修复

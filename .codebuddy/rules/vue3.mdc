@@ -1,0 +1,114 @@
+---
+name: vue_component_development
+description: Vue 3 组件开发指南
+globs: "**/*.{vue}"
+alwaysApply: false
+priority: 4
+
+updatedAt: 2026-08-18T00:00:00.000Z
+provider: "IT Team"
+author: "zuojt"
+---
+
+# Vue 3 组件开发指南
+
+> 本项目已启用自动导入（见 `type_components_import` 规则）：`ref`/`computed` 等 Vue API 与项目 hooks **禁止手动 import**；`message`/`Modal` 等函数式 API 需手动导入。示例代码必须符合 Prettier 规则（分号、单引号、尾随逗号）。
+
+## 组件结构规范
+
+```vue
+<script setup lang="ts">
+// 手动导入（仅自动导入范围之外的内容：函数式 API、类型、业务模块）
+import { message } from 'ant-design-vue';
+import type { Rule } from 'ant-design-vue/es/form';
+import { submitDataApi } from '@/api/business';
+
+// 定义 Props 接口
+interface Props {
+  title: string;
+  data?: Record<string, unknown>[];
+  loading?: boolean;
+}
+
+// 定义 Props（响应式 API 无需 import，直接使用）
+const props = withDefaults(defineProps<Props>(), {
+  data: () => [],
+  loading: false,
+});
+
+// 定义 Emits
+const emit = defineEmits<{
+  (e: 'update:modelValue', value: string): void;
+  (e: 'submit', data: Record<string, unknown>): void;
+}>();
+
+// 响应式数据
+const state = reactive({
+  formData: {},
+  visible: false,
+});
+
+// 计算属性
+const computedData = computed(() => {
+  return props.data.filter(item => item.status === 'active');
+});
+
+// 方法（事件处理函数以 handle 前缀命名）
+const handleSubmit = async () => {
+  try {
+    await submitDataApi(state.formData);
+    message.success('操作成功');
+    emit('submit', state.formData);
+  } catch (error) {
+    message.error('操作失败');
+  }
+};
+
+// 生命周期（无需 import，直接使用）
+onMounted(() => {
+  // 初始化逻辑
+});
+
+// 对外暴露方法（供父组件通过 ref 调用，如 FormModel 的 open/close）
+defineExpose({
+  open,
+  close,
+});
+</script>
+
+<template>
+  <div class="component-container">
+    <!-- 组件内容 -->
+  </div>
+</template>
+
+<style lang="less" scoped>
+.component-container {
+  padding: 16px;
+}
+</style>
+```
+
+## 最佳实践
+
+1. **使用 Composition API**：统一使用 `<script setup lang="ts">` 语法糖，禁止 Options API
+2. **类型安全**：为 Props 和 Emits 定义 TypeScript 接口，避免 `any`
+3. **响应式数据**：使用 `reactive` 处理复杂对象，`ref` 处理基本类型
+4. **样式隔离**：使用 `scoped` 样式，避免样式污染
+5. **组件命名**：使用 PascalCase 命名组件文件
+6. **代码顺序**：imports → Props/Emits → 响应式数据 → computed → watch → 方法 → 生命周期 → defineExpose
+7. **弹窗类组件**：通过 `defineExpose` 暴露 `open(status, record?)` / `close()` 方法，供 `useCurd` 的 `formModelRef` 调用（完整列表页工作流参见 `curd` skill）
+
+## 状态管理
+
+- 简单状态使用组件内部状态
+- 跨页面/全局状态使用 Pinia store（定义在 `src/stores/`，持久化用 `pinia-plugin-persistedstate`）
+- 避免过度使用全局状态，优先使用组件通信（props/emits）
+
+## 性能优化
+
+- 使用计算属性缓存复杂计算
+- 合理使用 `watch` 和 `watchEffect`（禁止在回调中修改监听源数据，避免死循环）
+- 路由组件使用懒加载 `() => import('@/views/...')`
+- 大列表使用分页而非一次性加载
+- 高频事件（搜索输入等）使用 `useDebounceFn` 防抖

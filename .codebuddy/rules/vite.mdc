@@ -1,0 +1,149 @@
+---
+name: vite
+description: Vite 最佳实践 - 面向 Vue 3 + TypeScript 项目
+globs: "**/*.{ts,tsx,vue}"
+alwaysApply: false
+priority: 5
+
+updatedAt: 2026-08-18T00:00:00.000Z
+provider: "IT Team"
+author: "zuojt"
+---
+
+# Vite 最佳实践
+
+本指南针对 Vue 3 + TypeScript + Vite 项目（Vite 7.2），确保开发体验高效和生产构建优化。
+
+## 1. 项目配置理解
+
+本项目 `vite.config.ts` 已配置完成，扩展插件模块化管理在 `build/` 目录：
+
+- **路径别名**：`@` → `src/`，`#` → `types/`
+- **代理服务**：通过 `.env` 环境变量 `VITE_PROXY`（JSON 数组）配置，解析逻辑见 `build/proxy.ts`
+- **Less 配置**：`css.preprocessorOptions.less` 仅开启 `javascriptEnabled`；主题定制如需覆盖 Ant Design Vue 变量，在此处追加 `modifyVars`
+- **依赖预构建**：`optimizeDeps.include` 包含 `vue`、`pinia`、`vue-router`、`ant-design-vue/es`、`@vueuse/core`
+- **插件**：`@vitejs/plugin-vue`、`@vitejs/plugin-vue-jsx` 及自定义插件在 `build/plugin/` 下（autoImport、components、html、cdnImport、compression、imageOptimize、visualizer）
+- **SVG 支持**：`vite-svg-loader`，SVG 文件可按组件方式导入（配合 `src/components/icons/`）
+
+**不要修改 `vite.config.ts` 和 `build/` 的核心结构**，除非有明确的技术需求。
+
+## 2. 代码组织
+
+### 2.1 依赖自动导入，无需手写 import
+
+`vue` / `vue-router` / `pinia` / `axios` / `@vueuse/core`（白名单）/ `src/hooks` / `src/components` 均已自动导入（详见 `type_components_import` 规则），**生成代码时不要写这些 import**。
+
+业务模块导入使用无扩展名路径（与项目现有代码保持一致）：
+
+```typescript
+// ✅ 正确
+import { getListApi } from '@/api/user';
+import { downloadFile } from '@/utils/download';
+
+// ❌ 不推荐：带 .ts 扩展名（项目惯例是不带）
+// import { getListApi } from '@/api/user.ts';
+```
+
+### 2.2 避免桶形文件（Barrel Files）
+
+不要在 `index.ts` 中集中重导出所有模块，这会导致 Vite 获取并转换不必要的文件。
+
+```typescript
+// ❌ 避免：index.ts 重新导出所有 api
+// export * from './user';
+// export * from './role';
+
+// ✅ 直接导入具体文件
+import { getListApi } from '@/api/user';
+```
+
+（例外：`src/stores/index.ts` 作为 store 统一导出入口是既有约定，保持现状。）
+
+### 2.3 动态导入优化
+
+页面组件统一使用路由懒加载：
+
+```typescript
+// router/module/system.ts
+export default [
+  {
+    path: '/system/business',
+    component: () => import('@/views/system/business/index.vue'),
+  },
+];
+```
+
+大型第三方库或重组件可按需动态导入：
+
+```vue
+<script setup lang="ts">
+const EchartsChart = defineAsyncComponent(() => import('@/components/EchartsChart.vue'));
+</script>
+```
+
+## 3. 环境变量
+
+### 3.1 类型安全的环境变量
+
+项目通过 `build/utils.ts` 中的 `transformEnvConfType` 处理环境变量类型转换。客户端代码通过 `import.meta.env` 访问：
+
+```typescript
+// ✅ 正确访问环境变量
+const apiUrl = import.meta.env.VITE_GLOB_API_URL;
+const isProduction = import.meta.env.VITE_APP_NODE_ENV === 'production';
+
+// ❌ 禁止 process.env（Node 侧的 vite.config.ts / build/ 除外）
+```
+
+### 3.2 关键环境变量（以 `.env*` 文件实际为准）
+
+| 变量 | 说明 |
+|------|------|
+| `VITE_APP_NODE_ENV` | 运行环境（development/sit/uat/production） |
+| `VITE_PORT` | 开发服务器端口 |
+| `VITE_PROXY` | API 代理配置（JSON 数组，支持多后端） |
+| `VITE_GLOB_API_URL` | 本地接口地址代理路径 |
+| `VITE_GLOB_API_URL_PREFIX` | 接口地址前缀（生产直连地址） |
+| `VITE_GLOB_APP_TITLE` | 应用标题（注入 HTML 模板） |
+| `VITE_USE_MOCK` | 是否开启 mock |
+| `VITE_USE_CDN` | 生产构建是否启用 CDN 外部化 |
+| `VITE_BUILD_COMPRESS` | 压缩格式：gzip / brotli / gzip\|brotli |
+| `VITE_BUILD_COMPRESS_DELETE_ORIGIN_FILE` | 压缩后是否删除源文件 |
+| `VITE_USE_IMAGEMIN` | 生产构建是否压缩图片 |
+| `VITE_DROP_CONSOLE` | 是否移除 console 及 debugger（esbuild drop） |
+
+新增环境变量时同步更新 `env.d.ts` 类型声明。
+
+## 4. 构建配置注意事项
+
+### 4.1 Base 路径与部署
+
+- 开发环境默认 `/`；生产部署路径调整时再在 `vite.config.ts` 增加 `base` 配置
+- Nginx 部署参考 `deploy/` 下的配置文件与 `Dockerfile`
+
+### 4.2 样式处理
+
+Ant Design Vue 样式如需主题定制，在 `css.preprocessorOptions.less.modifyVars` 中覆盖变量；全局样式文件统一放 `src/assets/styles/`（按需创建），勿散落各页面。
+
+### 4.3 构建命令
+
+```bash
+pnpm build              # 生产构建
+pnpm build:dev          # development 模式
+pnpm build:sit / uat    # sit / uat 模式
+pnpm build-only         # 仅 vite build（各模式构建的底层命令）
+pnpm report             # 生成构建分析报告（rollup-plugin-visualizer）
+```
+
+## 5. 开发服务器最佳实践
+
+- 遇到插件/依赖解析问题时，先执行 `pnpm clean:cache` 清理 `node_modules/.vite`
+- 对于大型项目，可使用 `server.warmup` 预热关键文件
+- 遇到插件性能问题时，使用 `vite --debug plugin-transform` 调试
+
+## 6. 禁止事项
+
+- **禁止**手动修改 `types/auto-imports.d.ts` 和 `types/components.d.ts`（由 unplugin 自动生成）
+- **禁止**在客户端代码使用 `process.env`（应使用 `import.meta.env`）
+- **禁止**在 `.vue` 文件中使用 `require()` 语法（应使用 ES import）
+- **禁止**直接安装已在 CDN 外部化清单中的依赖的重复全局引入方式（查看 `build/plugin/cdnImport.ts`）

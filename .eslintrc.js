@@ -86,4 +86,30 @@ module.exports = {
       },
     ],
   },
+  overrides: [
+    {
+      // 业务页面代码：强制使用 unplugin-auto-import，禁止手动导入已自动注入的模块
+      // （stores/layouts/hooks/utils 等历史目录存在大量手动导入，待逐步迁移后再扩大范围）
+      files: ['src/views/**/*.vue', 'src/views/**/*.ts', 'src/views/**/*.tsx'],
+      rules: {
+        'no-restricted-imports': [
+          'error',
+          {
+            paths: [
+              { name: 'vue', message: '已由 unplugin-auto-import 自动导入，禁止手动 import（详见 .codebuddy/rules/type_components_import.mdc）', },
+              { name: 'vue-router', message: '已由 unplugin-auto-import 自动导入，禁止手动 import', },
+              { name: 'pinia', message: '已由 unplugin-auto-import 自动导入，禁止手动 import', },
+              { name: 'axios', message: '已由 unplugin-auto-import 自动导入（默认导出 axios）', },
+            ],
+            patterns: [
+              {
+                group: ['@/hooks/*', '@/hooks/**', '@/components/*', '@/components/**'],
+                message: '项目 hooks 与公共组件已由 unplugin-auto-import 自动导入，禁止手动 import',
+              },
+            ],
+          },
+        ],
+      },
+    },
+  ],
 };
